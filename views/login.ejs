@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/public/form.css">
+</head>
+<body>
+    <div class="container">
+            <h1>Scissors</h1>
+
+            <form class="login" method="post">
+                <h2>Login</h2>
+                <div class="form-label">
+                    <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="Enter Email"
+                    name="email"
+                    />
+                </div>
+                <div class="form-label">
+                    <input 
+                    type="password" 
+                    id="pwd" 
+                    placeholder="Enter Password"
+                    name="password"
+                    />
+                </div>
+                <div class="form-label">
+                    <button class="btn" type="submit">Submit</button>
+                </div>
+
+                <p class="form-label">Don't have an account? <a href="/scissors/signup">Sign up</a></p>
+
+                <div className="error-message">
+                    <p>Custom Url</p>
+                </div>
+            </form>
+    </div>
+</body>
+</html>
