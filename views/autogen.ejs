@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Url Generator</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+
+    
+
+    <div class="container">
+
+        <nav>
+            <div class="left">
+                <a href="/scissors/custom">Custom</a>
+                <a href="/scissors/autogenerate">Auto</a>
+                <a href="/scissors/history">History</a>
+            </div>
+            <p class="right">welcome</p>
+        </nav>
+        
+        <form class="urlForm" method="post">
+            <h2>Auto Generate</h2>
+            <div class="form-label">
+                <input type="text" name="fullurl" id="fullUrl" placeholder="Enter Url" required/>
+            </div>
+            
+            <div class="form-label">
+                <button type="submit" class="btn">Submit</button>
+            </div>
+
+            <% if(check){ %>
+                <div class="form-label">
+                    <p><a href="/:<%= link.newLink %>"><%= link.newLink %></a></p>
+                </div> 
+
+                <div class="form-label">
+                    <img src="<%= src %>" alt="QR CODE">
+                </div>
+
+            <% } %>
+            
+        </form>
+    </div>
+</body>
+</html>

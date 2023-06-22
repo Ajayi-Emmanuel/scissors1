@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Url Generator</title>
+    <link rel="stylesheet" href="/css/form.css">
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <div class="left">
+                <a href="/scissors/custom">Custom</a>
+                <a href="/scissors/autogenerate">Auto</a>
+                <a href="/scissors/history">History</a>
+            </div>
+            <p class="right">welcome user</p>
+        </nav>
+
+        
+
+        <section>
+            <h2>Scissors History</h2>
+            <table style="width: 100%" class="table">
+            <tr>
+                <th>FullUrl</th>
+                <th>ShortUrl</th>
+                <th>Clicks</th>
+                <th>QrCode</th>
+            </tr>
+            <% allLinks.forEach(linkinfo => {  %>
+                <tr>
+                    <td><a href="<%=linkinfo.fullurl%>"><%=linkinfo.fullurl%></a></td>
+                    <td><a href="/:<%=linkinfo.newLink%>"><%=linkinfo.newLink%></a></td>
+                    <td><%=linkinfo.clicks%></td>
+                    <td><%=linkinfo.src %></td>
+                </tr>
+            <% }) %>
+        </table>
+        </section>
+    </div>
+</body>
+</html>

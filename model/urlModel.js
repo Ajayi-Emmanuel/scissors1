@@ -14,10 +14,13 @@ const UrlSchema = new Schema({
         required: true,
         unique: true
     },
+    src: {
+        type: String, 
+        required: true
+    },
     clicks: {
         default: 0,
-        type: Number,
-        required: true
+        type: Number 
     }
 
 })

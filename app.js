@@ -27,23 +27,21 @@ app.get('/scissors/signup', (req, res) => {
 })
 
 app.get('/scissors/login', (req, res) => {
-    res.render('login')
-})
-
-app.get('/scissors/dashboard', (req,res) => {
-    res.render('dashboard')
+    res.render('login', {
+        error: false
+    })
 })
 
 app.get('/scissors/autogenerate', (req,res) => {
-    res.render('auto')
-})
-
-app.get('/scissors/history', (req,res) => { 
-    res.render('history')
+    res.render('autogen', {
+        check:false
+    })
 })
 
 app.get('/scissors/custom', (req,res) => {
-    res.render('custom')
+    res.render('custom', {
+        check: false
+    })
 })
 app.post('/scissors/signup', async (req, res) => {
     const {email,password} = req.body
@@ -81,55 +79,77 @@ app.post("/scissors/login", async (req, res) => {
 
     const user = await userModel.findOne({email}).lean()
     if(!user){
-        res.status(403).json({
-            msg: "User not Found"
+        res.status(403)
+        res.render('login', {
+            error: "User not found" 
         })
     }else{
 
-        if(await bycrypt.compare(password, user.password)){
-            res.status(200).json({
-                msg: "Login successfull"
-            })
+        if(await bycrypt.compare(password, user.password)){   
+            res.redirect('/scissors/autogenerate')
         }else{
-            res.status(403).json({
-                msg: "Wrong password"
+            res.status(403)
+            res.render('login', {
+                error: "Incorrect Password or Email" 
             })
         }
     }
 })
 
-app.post("/scissors/autogenerate", (req, res) => {
-    const {fullurl} = req.body 
+app.post("/scissors/autogenerate", async (req, res) => {
+    const {fullurl} = req.body
     newLink = randomize()
-    const code = qrcode.toDataURL(fullurl, (err, url) => {
-        console.log(url)
-    })
 
-    urlModel.create({fullurl, newLink})  
-    res.json({ 
-        message: "Successfull",
-        newLink: newLink,
-        qrcode: code
+    //create QRCODE
+    qrcode.toDataURL(fullurl, async (err, src) => {
+        if(err) res.send("Error occured")
+
+        await urlModel.create({fullurl, newLink, src})
+        const link = await urlModel.findOne({newLink}).lean()
+        res.render('autogen', {
+            check: true,
+            src, 
+            link})
     })
     
 })
 
-app.post("/scissors/custom", (req, res)=> {
+app.post("/scissors/custom", async(req, res)=> {
     const {fullurl, shorturl} = req.body
     const newLink = shorturl
 
-    urlModel.create({fullurl, newLink})
-    res.json({ 
-        message: "Successfull",
-        newLink: newLink
+    qrcode.toDataURL(fullurl, async (err, src) => {
+        if(err) res.send("Error occured")
+
+        await urlModel.create({fullurl, newLink, src})
+        const link = await urlModel.findOne({newLink}).lean()
+
+        res.render('custom', {
+            check: true,
+            src, 
+            link
+        })
     })
+
 })
 
-app.get("/history", async (req, res) => {
+app.get('/:shortid', async (req, res) => {
+    const short = req.params.shortid.split(':');
+    shortid = short[1]
+    urlDetails = await urlModel.findOne({newLink: shortid})   
+    if (!urlDetails) return res.status(404);
+
+    urlDetails.clicks++ 
+    urlDetails.save()
+    res.redirect(urlDetails.fullurl)
+})
+
+app.get("/scissors/history", async (req, res) => {
     const allLinks = await urlModel.find()
-    res.send(allLinks)
+    res.render("history", {allLinks})
+
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, () => { 
     console.log(`App listening at http://localhost:${PORT}`);
 })

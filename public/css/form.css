@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+
+}
+.container{
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/*************************************************
+                HISTORY
+*************************************************/
+
+section{
+    /* border: 1px solid red; */
+    padding: 20px;
+    overflow-x: auto;
+}
+
+h2{
+    margin: 20px 0;
+}
+table,th,td{
+    text-align: left;
+    border-collapse: collapse;
+    padding: 10px;
+}
+
+tr:nth-child(odd){
+    background-color: rgb(233, 230, 230);
+}
+
+a, p{
+    color: black;
+    text-decoration: none;
+    font-size: 16px
+}
+td a {
+   font-size: 14px; 
+}
+
+:nth-child(odd){
+    /* background-color: rgb(192, 188, 188); */
+}
+
+/*************************************************
+                NAVBAR
+*************************************************/
+nav{
+    background-color: rgb(224, 219, 219);
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.left{
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+.right{
+    width: 30%;
+}
+
+/*************************************************
+                FORM
+*************************************************/
+h1{
+    padding: 10px;
+    font-size: 40px;
+}
+
+form{
+    max-width: 100%;
+    margin: 50px auto;
+    padding: 10px;
+}
+
+.form-label, h2{
+    text-align: center;
+    margin-top: 15px;
+}
+input, .btn{
+    padding: 8px;
+    width: 300px;
+    max-width: 100%;
+}
+
+.error-message > p{
+    width: 250px;
+    margin: 40px auto;
+    padding: 20px 20px;
+    background-color: rgb(247, 169, 169);
+    color: white;
+    font-size: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+img{
+    height: 250px;
+    width: 250px;
+}

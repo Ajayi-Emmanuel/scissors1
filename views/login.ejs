@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/public/form.css">
+    <link rel="stylesheet" href="/css/form.css">
 </head>
 <body>
     <div class="container">
@@ -17,6 +17,7 @@
                     type="email" 
                     id="email" 
                     placeholder="Enter Email"
+                    required
                     name="email"
                     />
                 </div>
@@ -26,6 +27,7 @@
                     id="pwd" 
                     placeholder="Enter Password"
                     name="password"
+                    required
                     />
                 </div>
                 <div class="form-label">
@@ -33,10 +35,12 @@
                 </div>
 
                 <p class="form-label">Don't have an account? <a href="/scissors/signup">Sign up</a></p>
-
-                <div className="error-message">
-                    <p>Custom Url</p>
-                </div>
+                <% if(error){ %>
+                    <div class="error-message">
+                        <p><%= error %></p>
+                    </div>
+                <% } %> 
+                 
             </form>
     </div>
 </body>
