@@ -20,6 +20,10 @@ app.set('view engine', 'ejs')
 app.use('/', userRoute)
 app.use('/scissors', urlRoute)
 
+app.get('/', (req,res)=> {
+    res.render("login")
+})
+
 app.get('/:shortid', async (req, res) => {
     const short = req.params.shortid.split(':');
     shortid = short[1]
