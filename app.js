@@ -21,7 +21,9 @@ app.use('/', userRoute)
 app.use('/scissors', urlRoute)
 
 app.get('/', (req,res)=> {
-    res.render("login")
+    res.render("login", {
+        error: false
+    })
 })
 
 app.get('/:shortid', async (req, res) => {
