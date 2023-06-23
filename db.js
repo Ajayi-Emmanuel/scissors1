@@ -8,7 +8,7 @@ function connectToDb(){
 
     mongoose.connect(MONGODB_URL);
 
-    mongoose.connection.on('connected', () =>{
+    mongoose.connection.on('connected', () =>{ 
         console.log("Connected to the database!");
     })
 
