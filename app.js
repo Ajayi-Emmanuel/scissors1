@@ -32,5 +32,5 @@ app.get('/:shortid', async (req, res) => {
 })
 
 app.listen(PORT, () => { 
-    console.log(`App listening at http://localhost:${PORT}/scissors/`);
-})
+    console.log(`App listening at http://localhost:${PORT}/scissors/login`);
+}) 
