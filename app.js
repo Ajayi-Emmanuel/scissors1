@@ -17,7 +17,7 @@ const userRoute = require('./routes/user')
 const urlRoute = require('./routes/scissors')
 
 app.set('view engine', 'ejs')
-app.use('/scissors', userRoute)
+app.use('/', userRoute)
 app.use('/scissors', urlRoute)
 
 app.get('/:shortid', async (req, res) => {
@@ -32,5 +32,5 @@ app.get('/:shortid', async (req, res) => {
 })
 
 app.listen(PORT, () => { 
-    console.log(`App listening at http://localhost:${PORT}/scissors/login`);
+    console.log(`App listening at http://localhost:${PORT}`);
 }) 

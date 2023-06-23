@@ -32,7 +32,7 @@ userRoute.post('/signup', async (req, res) => {
         email,
         password
     })
-    res.status(200).redirect('/scissors/login')
+    res.status(200).redirect('/login')
 })
 
 userRoute.post("/login", async (req, res) => {
