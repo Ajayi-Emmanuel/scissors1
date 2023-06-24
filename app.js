@@ -18,7 +18,7 @@ const urlRoute = require('./routes/scissors')
 
 app.set('view engine', 'ejs')
 app.use('/', userRoute)
-app.use('/scissors', urlRoute)
+app.use('/scissors', verifyToken, urlRoute)
 
 app.get('/', (req,res)=> {
     res.render("login", {

@@ -21,6 +21,10 @@ const UrlSchema = new Schema({
     clicks: {
         default: 0,
         type: Number 
+    },
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "users"
     }
 
 })

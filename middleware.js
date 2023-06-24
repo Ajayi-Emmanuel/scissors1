@@ -1,6 +1,5 @@
 const {sign, verify} = require("jsonwebtoken")
 require("dotenv").config()
-const cookies = require("cookie-parser")
 
 const createToken =  (user)=> {
     const accessToken = sign(
@@ -13,8 +12,11 @@ const createToken =  (user)=> {
 }
 
 const verifyToken = (req, res, next) => {
-    const accessToken = req.cookies['token']
-    console.log(accessToken)
+
+    // const accessToken = req.cookie['']
+    console.log(res.body) 
+    // console.log(req.Cookie)  
+    
     // if(!accessToken) 
     //     return res.status(400).json({
     //         error: "User not Authenticated"
@@ -23,7 +25,6 @@ const verifyToken = (req, res, next) => {
     //     try{
     //         const validToken = verify(accessToken, process.env.JWT_SECRET)
     //         if(validToken){
-    //             req.authenticated = true
     //             req.email = validToken.email;
     //             return next()
     //         }

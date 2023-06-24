@@ -30,7 +30,8 @@ userRoute.post('/signup', async (req, res) => {
     }
     const user = await userModel.create({
         email,
-        password
+        password,
+
     })
     res.status(200).redirect('/login')
 })
@@ -59,15 +60,17 @@ userRoute.post("/login", async (req, res) => {
 
         if(await bycrypt.compare(password, user.password)){ 
 
-            const accessToken = createToken(user)
-
-            res.cookie("token", accessToken, 
-            {
-                maxAge: 60*60*1000,
-                httpOnly: true,
-            })
-            
+            const accessToken = createToken(user.email)
+            // res.cookie(accessToken, 
+            // {
+            //     maxAge: 60*60*1000,
+            //     httpOnly: true,
+            // })
+            res.body = {
+                token: accessToken
+            }
             res.redirect('/scissors/autogenerate')
+            
         }else{
             res.status(403)
             res.render('login', {
