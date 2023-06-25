@@ -5,8 +5,7 @@ const ObjectId = Schema.ObjectId;
 const UrlSchema = new Schema({
     fullurl: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     newLink: {
         type: String,
@@ -21,12 +20,12 @@ const UrlSchema = new Schema({
         default: 0,
         type: Number 
     },
-    owner: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users"
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
     }
 
 })
 
 const urlModel = mongoose.model('urlLinks', UrlSchema)
-module.exports = urlModel;
+module.exports = urlModel; 

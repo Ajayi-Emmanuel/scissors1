@@ -15,8 +15,8 @@ const UserSchema = new Schema({
         min: 8
     },
     links: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "urlLinks"
+        type: Schema.Types.ObjectId,
+        ref: 'urlLinks'
     }]
 
 })
@@ -41,5 +41,5 @@ UserSchema.methods.isValidPassword = async function(password) {
   }
 
 
-const userModel = mongoose.model("users", UserSchema)
+const userModel = mongoose.model('users', UserSchema)
 module.exports = userModel; 

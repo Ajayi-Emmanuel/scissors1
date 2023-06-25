@@ -83,7 +83,7 @@ userRoute.post("/login", async (req, res) => {
             res.status(403)
             res.render('login', {
                 error: "Incorrect Password or Email" 
-            })
+            }) 
         }
     }
 })

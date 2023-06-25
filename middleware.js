@@ -23,7 +23,7 @@ const verifyToken = (req, res, next) => {
         try{
             const validToken = verify(accessToken, process.env.JWT_SECRET)
             if(validToken){
-                req.email = validToken.email;
+                req.user = validToken;
                 return next()
             }
         }catch(err){

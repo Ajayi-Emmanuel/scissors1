@@ -4,26 +4,28 @@ const qrcode = require("qrcode")
 const urlModel = require("../model/urlModel")
 const userModel = require("../model/userModel")
 const urlRouter = express.Router();
+const cacheExpress = require("express-api-cache")
+const cache = cacheExpress.cache;
 
 
 urlRouter.get('/autogenerate', (req,res) => {
     res.render('autogen', {
         check: false,
-        email: req.email
+        email: req.user.email
     })
     
 })
-
+ 
 urlRouter.get('/custom', (req,res) => {
     res.render('custom', {
         check: false,
-        email: req.email
+        email: req.user.email
     })
 })
 
 
 urlRouter.post("/autogenerate", async (req, res) => {
-    const email = req.email
+    const user = req.user
     const {fullurl} = req.body
     newLink = randomize()
 
@@ -31,13 +33,15 @@ urlRouter.post("/autogenerate", async (req, res) => {
     qrcode.toDataURL(fullurl, async (err, src) => {
         if(err) res.send("Error occured")
 
-        await urlModel.create({fullurl, newLink, src})
+        const url = await urlModel.create({fullurl, newLink, src, user: user.id})
         const link = await urlModel.findOne({newLink}).lean()
+        userModel.links = url;
+        userModel.save();  
         res.render('autogen', {
             check: true,
             src, 
             link,
-            email
+            email: req.user.email
 
         })
     })
@@ -45,34 +49,33 @@ urlRouter.post("/autogenerate", async (req, res) => {
 })
 
 urlRouter.post("/custom", async(req, res)=> {
-    const email = req.email
+    const user = req.user
     const {fullurl, shorturl} = req.body
     const newLink = shorturl
 
     qrcode.toDataURL(fullurl, async (err, src) => {
         if(err) res.send("Error occured")
 
-        await urlModel.create({fullurl, newLink, src})
+        await urlModel.create({fullurl, newLink, src, user: user.id})
         const link = await urlModel.findOne({newLink}).lean()
 
         res.render('custom', {
             check: true,
             src, 
             link,
-            email
+            email: req.user.email
         })
     })
 
 })
 
-urlRouter.get("/history", async (req, res) => {
-    const email = req.email
-    let userFound= await userModel.find({email: email}).populate("links")
-    // res.json({userFound})
+urlRouter.get("/history", cache("10 minutes"), async (req, res) => {
+    const user = req.user
+    let userFound= await urlModel.find().populate('user')
     console.log(userFound)
     // res.render("history", {
-    //     allLinks,
-    //     email
+    //     allLinks: userFound,
+    //     email 
     // })
 
 }) 
