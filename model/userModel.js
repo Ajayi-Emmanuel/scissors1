@@ -1,10 +1,8 @@
 const mongoose = require("mongoose")
 const bcrypt = require("bcrypt")
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const UserSchema = new Schema({
-    ObjectId,
     email: {
         type: String,
         required: true,
@@ -17,7 +15,7 @@ const UserSchema = new Schema({
         min: 8
     },
     links: [{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "urlLinks"
     }]
 
@@ -43,5 +41,5 @@ UserSchema.methods.isValidPassword = async function(password) {
   }
 
 
-const userModel = mongoose.model('users', UserSchema)
+const userModel = mongoose.model("users", UserSchema)
 module.exports = userModel; 

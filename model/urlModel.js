@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.ObjectId;
 
 const UrlSchema = new Schema({
-    ObjectId,
     fullurl: {
         type: String,
         required: true,
@@ -23,7 +22,7 @@ const UrlSchema = new Schema({
         type: Number 
     },
     owner: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "users"
     }
 

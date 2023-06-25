@@ -2,6 +2,7 @@ const express = require("express")
 require("dotenv").config()
 const urlModel = require("./model/urlModel")
 const {connectToDb} = require("./db")
+const cookieParser = require("cookie-parser")
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -10,11 +11,13 @@ connectToDb()
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
+app.use(cookieParser())
 app.use(express.static(__dirname + '/public')) 
 
 const {verifyToken} = require("./middleware")
 const userRoute = require('./routes/user')
 const urlRoute = require('./routes/scissors')
+
 
 app.set('view engine', 'ejs')
 app.use('/', userRoute)

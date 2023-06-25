@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/form.css">
-    <title>Document</title>
+    <title>SCISSORS || Sign Up</title>
 </head>
 <body>
     <div class="container">
@@ -21,6 +21,12 @@
                 <button class="btn" type="submit">Submit</button>
             </div>
             <p class="form-label">Have an Account? <a href="/login">Login</a> Here</p>
+
+            <% if(error){ %>
+                <div class="error-message">
+                    <p><%= error %></p>
+                </div>
+            <% } %> 
     
         </form>
     </div>

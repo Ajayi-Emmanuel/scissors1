@@ -8,19 +8,22 @@ const urlRouter = express.Router();
 
 urlRouter.get('/autogenerate', (req,res) => {
     res.render('autogen', {
-        check: false
+        check: false,
+        email: req.email
     })
     
 })
 
 urlRouter.get('/custom', (req,res) => {
     res.render('custom', {
-        check: false
+        check: false,
+        email: req.email
     })
 })
 
 
 urlRouter.post("/autogenerate", async (req, res) => {
+    const email = req.email
     const {fullurl} = req.body
     newLink = randomize()
 
@@ -33,13 +36,16 @@ urlRouter.post("/autogenerate", async (req, res) => {
         res.render('autogen', {
             check: true,
             src, 
-            link
+            link,
+            email
+
         })
     })
     
 })
 
 urlRouter.post("/custom", async(req, res)=> {
+    const email = req.email
     const {fullurl, shorturl} = req.body
     const newLink = shorturl
 
@@ -52,21 +58,23 @@ urlRouter.post("/custom", async(req, res)=> {
         res.render('custom', {
             check: true,
             src, 
-            link
+            link,
+            email
         })
     })
 
 })
 
 urlRouter.get("/history", async (req, res) => {
-    // const allLinks = await urlModel.find()
-    let allLinks = await userModel.find({email: user.email}).populate("links") 
-    console.log(allLinks)
-    res.render("history", {
-        user,
-        allLinks
-    })
+    const email = req.email
+    let userFound= await userModel.find({email: email}).populate("links")
+    // res.json({userFound})
+    console.log(userFound)
+    // res.render("history", {
+    //     allLinks,
+    //     email
+    // })
 
-})
+}) 
 
 module.exports = urlRouter

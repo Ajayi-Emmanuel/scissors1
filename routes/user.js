@@ -6,7 +6,9 @@ const userRoute = express.Router();
 const {createToken} = require("../middleware")
 
 userRoute.get('/signup', (req, res) => {
-    res.render('signup')
+    res.render('signup', {
+        error: false
+    })
 })
 
 userRoute.get('/login', (req, res) => {
@@ -32,8 +34,17 @@ userRoute.post('/signup', async (req, res) => {
         email,
         password,
 
+    }).then((user) => {
+        res.status(200).redirect('/login')
+    }).catch((err) => {
+        if (err.code === 11000) {
+            res.status(403)
+            res.render('signup', {
+                error: "Duplicate Username or Mail"
+            })
+        }
     })
-    res.status(200).redirect('/login')
+    
 })
 
 userRoute.post("/login", async (req, res) => {
@@ -49,7 +60,6 @@ userRoute.post("/login", async (req, res) => {
             error: "Password field must be filled!"
         })
     }
-
     const user = await userModel.findOne({email}).lean()
     if(!user){
         res.status(403)
@@ -60,15 +70,13 @@ userRoute.post("/login", async (req, res) => {
 
         if(await bycrypt.compare(password, user.password)){ 
 
-            const accessToken = createToken(user.email)
-            // res.cookie(accessToken, 
-            // {
-            //     maxAge: 60*60*1000,
-            //     httpOnly: true,
-            // })
-            res.body = {
-                token: accessToken
-            }
+            const accessToken = createToken(user)
+            res.cookie("token", accessToken, 
+            {
+                maxAge: 60*60*1000,
+                httpOnly: true,
+            })
+        
             res.redirect('/scissors/autogenerate')
             
         }else{
