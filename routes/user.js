@@ -80,7 +80,7 @@ userRoute.post("/login", async (req, res) => {
             res.redirect('/scissors/autogenerate')
             
         }else{
-            res.status(403)
+            res.status(403) 
             res.render('login', {
                 error: "Incorrect Password or Email" 
             }) 

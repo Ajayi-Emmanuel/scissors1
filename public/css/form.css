@@ -17,6 +17,7 @@ section{
     /* border: 1px solid red; */
     padding: 20px;
     overflow-x: auto;
+    overflow-y: auto;
 }
 
 h2{

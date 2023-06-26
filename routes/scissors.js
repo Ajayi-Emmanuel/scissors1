@@ -8,6 +8,7 @@ const cacheExpress = require("express-api-cache")
 const cache = cacheExpress.cache;
 
 
+
 urlRouter.get('/autogenerate', (req,res) => {
     res.render('autogen', {
         check: false,
@@ -34,17 +35,21 @@ urlRouter.post("/autogenerate", async (req, res) => {
         if(err) res.send("Error occured")
 
         const url = await urlModel.create({fullurl, newLink, src, user: user.id})
-        const link = await urlModel.findOne({newLink}).lean()
-        userModel.links = url;
-        userModel.save();  
+        
+        const userFound = await userModel.findOne({email: user.email})
+        userFound.links.push(url)
+        userFound.save()
+
         res.render('autogen', {
             check: true,
             src, 
-            link,
+            newLink,
             email: req.user.email
 
         })
     })
+    
+        
     
 })
 
@@ -56,28 +61,31 @@ urlRouter.post("/custom", async(req, res)=> {
     qrcode.toDataURL(fullurl, async (err, src) => {
         if(err) res.send("Error occured")
 
-        await urlModel.create({fullurl, newLink, src, user: user.id})
-        const link = await urlModel.findOne({newLink}).lean()
+        const url = await urlModel.create({fullurl, newLink, src, user: user.id})
+        
+        const userFound = await userModel.findOne({email: user.email})
+        userFound.links.push(url)
+        userFound.save()
 
         res.render('custom', {
             check: true,
             src, 
-            link,
+            newLink,
             email: req.user.email
         })
     })
 
 })
 
-urlRouter.get("/history", cache("10 minutes"), async (req, res) => {
+urlRouter.get("/history",  async (req, res) => {
     const user = req.user
-    let userFound= await urlModel.find().populate('user')
-    console.log(userFound)
-    // res.render("history", {
-    //     allLinks: userFound,
-    //     email 
-    // })
+    let allLinks= await userModel.findOne({email: user.email}).populate('links')
 
-}) 
+    res.render("history", {
+        allLinks: allLinks.links, 
+        email: req.user.email
+    })
+    
+})  
 
 module.exports = urlRouter
