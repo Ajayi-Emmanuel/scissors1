@@ -12,6 +12,7 @@ const cache = cacheExpress.cache;
 urlRouter.get('/autogenerate', (req,res) => {
     res.render('autogen', {
         check: false,
+        error: false,
         email: req.user.email
     })
     
