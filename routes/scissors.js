@@ -20,6 +20,7 @@ urlRouter.get('/autogenerate', (req,res) => {
 urlRouter.get('/custom', (req,res) => {
     res.render('custom', {
         check: false,
+        error: false,
         email: req.user.email
     })
 })
@@ -34,19 +35,30 @@ urlRouter.post("/autogenerate", async (req, res) => {
     qrcode.toDataURL(fullurl, async (err, src) => {
         if(err) res.send("Error occured")
 
-        const url = await urlModel.create({fullurl, newLink, src, user: user.id})
+        try {
+            const url = await urlModel.create({fullurl, newLink, src, user: user.id})
         
-        const userFound = await userModel.findOne({email: user.email})
-        userFound.links.push(url)
-        userFound.save()
+            const userFound = await userModel.findOne({email: user.email})
+            userFound.links.push(url)
+            userFound.save()
 
-        res.render('autogen', {
-            check: true,
-            src, 
-            newLink,
-            email: req.user.email
-
-        })
+            res.render('autogen', {
+                check: true,
+                src, 
+                newLink,
+                email: req.user.email
+    
+            })
+        } catch (err) {
+            if (err.code === 11000) {
+                res.status(403)
+                res.render('autogen', {
+                    email: req.user.email,
+                    check: false,
+                    error: "Check your history; Link has been shortened!"
+                })
+            }
+        }
     })
     
         
@@ -61,18 +73,30 @@ urlRouter.post("/custom", async(req, res)=> {
     qrcode.toDataURL(fullurl, async (err, src) => {
         if(err) res.send("Error occured")
 
-        const url = await urlModel.create({fullurl, newLink, src, user: user.id})
-        
-        const userFound = await userModel.findOne({email: user.email})
-        userFound.links.push(url)
-        userFound.save()
+        try {
+            const url = await urlModel.create({fullurl, newLink, src, user: user.id})
 
-        res.render('custom', {
-            check: true,
-            src, 
-            newLink,
-            email: req.user.email
-        })
+            const userFound = await userModel.findOne({email: user.email})
+            userFound.links.push(url)
+            userFound.save()
+
+            res.render('custom', {
+                check: true,    
+                src, 
+                newLink,
+                email: req.user.email
+            })
+        } catch (err) {
+            if (err.code === 11000) {
+                res.status(403)
+                res.render('custom', {
+                    email: req.user.email,
+                    check: false,
+                    error: "Check your history; Link has been shortened!"
+                })
+            }
+        }
+  
     })
 
 })

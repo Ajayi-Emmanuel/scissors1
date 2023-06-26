@@ -38,6 +38,11 @@
                         <img src="<%= src %>" alt="QR CODE">
                     </div>  
                 <% } %>
+                <% if(error){ %>
+                    <div class="error-message">
+                        <p><%= error %></p>
+                    </div>
+                <% } %> 
             </form>
         </div>
 </body>
