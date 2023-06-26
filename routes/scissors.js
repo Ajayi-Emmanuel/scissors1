@@ -45,6 +45,7 @@ urlRouter.post("/autogenerate", async (req, res) => {
 
             res.render('autogen', {
                 check: true,
+                error: false,
                 src, 
                 newLink,
                 email: req.user.email
@@ -83,6 +84,7 @@ urlRouter.post("/custom", async(req, res)=> {
 
             res.render('custom', {
                 check: true,    
+                error: false,
                 src, 
                 newLink,
                 email: req.user.email
