@@ -20,6 +20,7 @@ const swaggerDefinition = {
     }
 }
 
+
 const options = {
     swaggerDefinition,
     apis: ["./routes/*.js"]
@@ -47,12 +48,34 @@ app.set('view engine', 'ejs')
 app.use('/', userRoute)
 app.use('/scissors', verifyToken, urlRoute)
 
+/**
+ * @swagger
+ * /:
+ *  get:
+ *   summary: Loads the login page
+ *   responses:
+ *     '200':
+ *         description: Loads the login page
+ *     '404':
+ *         description: Page not found
+ */
 app.get('/', (req,res)=> {
     res.render("login", {
         error: false
     })
 })
 
+/**
+ * @swagger
+ * /:
+ *   get:
+ *    summary: Loads the page from the shortened URL
+ *   responses:
+ *      '200':
+ *          description: Redirect page from the shortened URL to the original URL
+ *     '404':
+ *          description: Page not found
+ */
 app.get('/:shortid', async (req, res) => {
     const short = req.params.shortid.split(':');
     shortid = short[1]

@@ -1,3 +1,11 @@
+/**
+ * 
+ * @returns {string} random string
+ * @description This function generates a random string of length 10
+ * @example
+ * Random()
+ * // returns 'a1b2c3d4e5'
+ */
 function Random(){
     const MAX = 36;
 

@@ -3,7 +3,7 @@ const userModel = require("../model/userModel")
 const bycrypt = require("bcrypt")
 // const userController = require("../controllers/user")
 const userRoute = express.Router();
-const {createToken} = require("../middleware")
+const {createToken} = require("../middleware") 
 
 /**
  * @swagger
@@ -51,13 +51,8 @@ userRoute.get('/login', (req, res) => {
  *     application/json:
  *      schema:
  *         type: object
- *         properties:
- *           email:
- *             type: string
- *             example: "hello@gmail.com"
- *           password:
- *             type: string
- *             example: "123456"
+ *         items:
+ *             $ref: '#/components/schemas/User'
  *   responses:
  *     '200':
  *       description: A successful response
