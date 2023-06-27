@@ -5,18 +5,69 @@ const bycrypt = require("bcrypt")
 const userRoute = express.Router();
 const {createToken} = require("../middleware")
 
+/**
+ * @swagger
+ * /signup:
+ *  get:
+ *     description: Use to render the signup page
+ *     responses:
+ *      '200':
+ *          description: A successful response
+ *      '403':
+ *          description: A failed response
+*/
 userRoute.get('/signup', (req, res) => {
     res.render('signup', {
         error: false
     })
 })
 
+
+/**
+ * @swagger
+ * /login:
+ *  get:
+ *     description: Use to render the login page
+ *     responses:
+ *      '200':
+ *          description: A successful response
+ *      '403':
+ *          description: A failed response
+ */
 userRoute.get('/login', (req, res) => {
     res.render('login', {
         error: false
     })
 })
 
+/**
+ * @swagger
+ * /signup:
+ *  post:
+ *   description: Use to create a new user
+ *   requestBody:
+ *    required: true
+ *    content:
+ *     application/json:
+ *      schema:
+ *         type: object
+ *         properties:
+ *           email:
+ *             type: string
+ *             example: "hello@gmail.com"
+ *           password:
+ *             type: string
+ *             example: "123456"
+ *   responses:
+ *     '200':
+ *       description: A successful response
+ *     '403':
+ *       description: A failed response
+ *     '400':
+ *       description: A failed response
+ *     '500':
+ *       description: A failed response
+ */
 userRoute.post('/signup', async (req, res) => {
     const {email,password} = req.body
 
@@ -47,6 +98,30 @@ userRoute.post('/signup', async (req, res) => {
     
 })
 
+/**
+ * @swagger
+ * /login:
+ *  post:
+ *    description: Use to login a user
+ *    requestBody:
+ *     required: true
+ *     content:
+ *       application/json:
+ *        schema:
+ *          type: object
+ *          properties:
+ *            email:
+ *              type: string
+ *              example: ""
+ *            password:
+ *              type: string
+ *              example: ""
+ *    responses:
+ *     '200':
+ *      description: A successful response
+ *     '403':
+ *      description: A failed response
+ */
 userRoute.post("/login", async (req, res) => {
     const {email, password} = req.body
 

@@ -3,6 +3,28 @@ require("dotenv").config()
 const urlModel = require("./model/urlModel")
 const {connectToDb} = require("./db")
 const cookieParser = require("cookie-parser")
+const swaggerJsDoc = require("swagger-jsdoc")
+const swaggerUi = require("swagger-ui-express")
+
+const swaggerDefinition = {
+    openapi: "3.0.0",
+    info: {
+        title: "Scissors API",
+        version: "1.0.0",
+        description: "This is an API application made with Express and documented with Swagger. It is a URL shortener application.",
+        contact: {
+            name: "Ajayi Emmanuel"
+        },
+        servers: ["http://localhost:3000"],
+        description: "This is an API application made with Express and documented with Swagger. It is a URL shortener application."
+    }
+}
+
+const options = {
+    swaggerDefinition,
+    apis: ["./routes/*.js"]
+}
+const swaggerSpec = swaggerJsDoc(options)
 
 
 const app = express();
@@ -13,6 +35,7 @@ connectToDb()
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 app.use(cookieParser())
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use(express.static(__dirname + '/public')) 
 
 const {verifyToken} = require("./middleware")
