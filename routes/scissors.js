@@ -6,6 +6,7 @@ const userModel = require("../model/userModel")
 const urlRouter = express.Router();
 const cacheExpress = require("express-api-cache")
 const cache = cacheExpress.cache;
+const urlChecker = require("is-url")
 
 
 
@@ -30,77 +31,94 @@ urlRouter.get('/custom', (req,res) => {
 urlRouter.post("/autogenerate", async (req, res) => {
     const user = req.user
     const {fullurl} = req.body
-    newLink = randomize()
+    if(!urlChecker(fullurl)) {
+        res.status(403)
+        res.render('autogen', {
+            email: req.user.email,
+            check: false,
+            error: "Invalid URL"
+        })
+    }else{
+        newLink = randomize()
+        //create QRCODE
+        qrcode.toDataURL(fullurl, async (err, src) => {
+            if(err) res.send("Error occured")
 
-    //create QRCODE
-    qrcode.toDataURL(fullurl, async (err, src) => {
-        if(err) res.send("Error occured")
+            try {
+                const url = await urlModel.create({fullurl, newLink, src, user: user.id})
+            
+                const userFound = await userModel.findOne({email: user.email})
+                userFound.links.push(url)
+                userFound.save()
 
-        try {
-            const url = await urlModel.create({fullurl, newLink, src, user: user.id})
-        
-            const userFound = await userModel.findOne({email: user.email})
-            userFound.links.push(url)
-            userFound.save()
-
-            res.render('autogen', {
-                check: true,
-                error: false,
-                src, 
-                newLink,
-                email: req.user.email
-    
-            })
-        } catch (err) {
-            if (err.code === 11000) {
-                res.status(403)
                 res.render('autogen', {
-                    email: req.user.email,
-                    check: false,
-                    error: "Check your history; Link has been shortened!"
-                })
-            }
-        }
-    })
-    
+                    check: true,
+                    error: false,
+                    src, 
+                    newLink,
+                    email: req.user.email
         
+                })
+            } catch (err) {
+                if (err.code === 11000) {
+                    res.status(403)
+                    res.render('autogen', {
+                        email: req.user.email,
+                        check: false,
+                        error: "Check your history; Link has been shortened!"
+                    })
+                }
+            }
+        })
+
+    }    
     
 })
 
 urlRouter.post("/custom", async(req, res)=> {
     const user = req.user
     const {fullurl, shorturl} = req.body
-    const newLink = shorturl
+    if(!urlChecker(fullurl)) {
+        res.status(403)
+        res.render('custom', {
+            email: req.user.email,
+            check: false,
+            error: "Invalid URL"
+        })
+    }else{
+        const newLink = shorturl
 
-    qrcode.toDataURL(fullurl, async (err, src) => {
-        if(err) res.send("Error occured")
+        qrcode.toDataURL(fullurl, async (err, src) => {
+            if(err) res.send("Error occured")
 
-        try {
-            const url = await urlModel.create({fullurl, newLink, src, user: user.id})
+            try {
+                const url = await urlModel.create({fullurl, newLink, src, user: user.id})
 
-            const userFound = await userModel.findOne({email: user.email})
-            userFound.links.push(url)
-            userFound.save()
+                const userFound = await userModel.findOne({email: user.email})
+                userFound.links.push(url)
+                userFound.save()
 
-            res.render('custom', {
-                check: true,    
-                error: false,
-                src, 
-                newLink,
-                email: req.user.email
-            })
-        } catch (err) {
-            if (err.code === 11000) {
-                res.status(403)
                 res.render('custom', {
-                    email: req.user.email,
-                    check: false,
-                    error: "Check your history; Link has been shortened!"
+                    check: true,    
+                    error: false,
+                    src, 
+                    newLink,
+                    email: req.user.email
                 })
+            } catch (err) {
+                if (err.code === 11000) {
+                    res.status(403)
+                    res.render('custom', {
+                        email: req.user.email,
+                        check: false,
+                        error: "Check your history; Link has been shortened!"
+                    })
+                }
             }
-        }
-  
-    })
+    
+        })
+    }
+    
 
 })
 
