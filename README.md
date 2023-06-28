@@ -1,16 +1,10 @@
 # scissors
 
-### A restaurant chatbot application built using socket.io, node, express
+### A Scissors application built using node, express. It is used to shorten long URLs
 
 ## URL
-1. Online: https://restaurant-chatbot-8mz1.onrender.com
-
-### Note
-
-___The site requests the user's name first before rendering the page.___
-
-
-___When the page has been rendered, the user has to type something for the bot to begin responding___
+1. Online: https://mern-hnu2.onrender.com
+2. Online Documentation: https://mern-hnu2.onrender.com/api-docs/
 
 ## Features
 1. When a customer lands on the chatbot page, the bot should send these options to the customer: 
@@ -36,7 +30,8 @@ ___When the page has been rendered, the user has to type something for the bot t
 * create a .env file and type in the following in it
 ```
   PORT = //enter your desired port i.e 3000, 4000 etc
-  SESSION_SECRET = //enter any string here i.e "akhdefwihgrwkgjwkjwkg"
+  JWT_SECRET = //enter any string here i.e "akhdefwihgrwkgjwkjwkg"
+  MONGODB_URL = //enter your database connection
 ```
-* Run npm run start_dev on the CLI to start application
+* Run npm run dev on the CLI to start application
 
