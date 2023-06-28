@@ -15,7 +15,7 @@ const swaggerDefinition = {
         contact: {
             name: "Ajayi Emmanuel"
         },
-        servers: ["http://localhost:3000"],
+        servers: ["https://mern-hnu2.onrender.com"],
         description: "This is an API application made with Express and documented with Swagger. It is a URL shortener application."
     }
 }
