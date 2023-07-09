@@ -26,18 +26,49 @@
                 <th>FullUrl</th>
                 <th>ShortUrl</th>
                 <th>Clicks</th>
-                <th>QrCode</th>
+                <th>Analytics</th>
             </tr>
             <% allLinks.forEach(linkinfo => {  %>
                 <tr>
                     <td><a href="<%=linkinfo.fullurl%>"><%=linkinfo.fullurl%></a></td>
                     <td><a href="/:<%=linkinfo.newLink%>"><%=linkinfo.newLink%></a></td>
                     <td><%=linkinfo.clicks%></td>
-                    <td><%=linkinfo.src %></td>
+                    <td><a href="/scissors/history/analytics/:<%=linkinfo.newLink%>" onclick= "showModal ()">Analytics</a></td>
                 </tr> 
             <% }) %>
         </table>
+
+        <% if(test == true){ %>
+            <div class="modal-container">
+                <div class="modal">
+                   <p>New Url : <%=url.newLink%></p>
+                   <p>Device Location:</p>
+                   <p>Clicks: <%=url.clicks%></p>
+                   <div class="form-label">
+                        <img src="<%= url.src %>" alt="QR CODE">
+                    </div>
+                   <button onclick="hideModal()">Close</button>
+                </div>
+            </div>
+        <% } %>
+        
         </section>
     </div>
+
+    <script>
+        window.onresize = function() {
+           var modalContainer = document.getElementsByClassName("modal-container")[0];
+           modalContainer.style.height = window.innerHeight + "px";
+           modalContainer.style.width = window.innerWidth + "px";
+        }
+        function showModal(){
+           var modalContainer = document.getElementsByClassName("modal-container")[0];
+           modalContainer.style.display = "flex";
+        }
+        function hideModal(){
+           var modalContainer = document.getElementsByClassName("modal-container")[0];
+           modalContainer.style.display = "none";
+        }
+     </script>
 </body>
 </html>

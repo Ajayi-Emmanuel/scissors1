@@ -105,3 +105,19 @@ img{
     height: 250px;
     width: 250px;
 }
+
+
+.modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.modal {
+    padding: 20px;
+    border: 1px solid rgb(192, 188, 188);
+    box-shadow: 2px 2px 5px #888888;
+}

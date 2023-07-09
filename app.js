@@ -3,8 +3,11 @@ require("dotenv").config()
 const urlModel = require("./model/urlModel")
 const {connectToDb} = require("./db")
 const cookieParser = require("cookie-parser")
+const rateLimit = require("express-rate-limit")
 const swaggerJsDoc = require("swagger-jsdoc")
 const swaggerUi = require("swagger-ui-express")
+const ip = require("ip")
+
 
 const swaggerDefinition = {
     openapi: "3.0.0",
@@ -31,10 +34,17 @@ const swaggerSpec = swaggerJsDoc(options)
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+const limiter = rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 100,
+    message: "Too many requests from this IP, please try again in an hour"
+})
+
 connectToDb()
 
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
+app.use(limiter)
 app.use(cookieParser())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use(express.static(__dirname + '/public')) 
