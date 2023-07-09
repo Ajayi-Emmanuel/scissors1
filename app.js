@@ -1,12 +1,11 @@
 const express = require("express")
 require("dotenv").config()
 const urlModel = require("./model/urlModel")
-const {connectToDb} = require("./db")
+const {connectToDb} = require("./utilis/db")
 const cookieParser = require("cookie-parser")
 const rateLimit = require("express-rate-limit")
 const swaggerJsDoc = require("swagger-jsdoc")
 const swaggerUi = require("swagger-ui-express")
-const ip = require("ip")
 
 
 const swaggerDefinition = {
@@ -26,7 +25,7 @@ const swaggerDefinition = {
 
 const options = {
     swaggerDefinition,
-    apis: ["./controllers/*.js"]
+    apis: ["../routes/*.js", "../controllers", "../utilis/*.js"]
 }
 const swaggerSpec = swaggerJsDoc(options)
 
@@ -49,7 +48,7 @@ app.use(cookieParser())
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use(express.static(__dirname + '/public')) 
 
-const {verifyToken} = require("./middleware")
+const {verifyToken} = require("./utilis/middleware")
 const userRoute = require('./routes/user')
 const urlRoute = require('./routes/scissors')
 
@@ -69,33 +68,12 @@ app.use('/scissors', verifyToken, urlRoute)
  *     '404':
  *         description: Page not found
  */
-app.get('/', (req,res)=> {
+app.get('/', (req,res)=> {  
     res.render("login", {
         error: false
     })
 })
 
-/**
- * @swagger
- * /:
- *   get:
- *    summary: Loads the page from the shortened URL
- *   responses:
- *      '200':
- *          description: Redirect page from the shortened URL to the original URL
- *     '404':
- *          description: Page not found
- */
-app.get('/:shortid', async (req, res) => {
-    const short = req.params.shortid.split(':');
-    shortid = short[1]
-    urlDetails = await urlModel.findOne({newLink: shortid})   
-    if (!urlDetails) return res.status(404);
-
-    urlDetails.clicks++ 
-    urlDetails.save()
-    res.redirect(urlDetails.fullurl)
-})
 
 app.listen(PORT, () => { 
     console.log(`App listening at http://localhost:${PORT}`);

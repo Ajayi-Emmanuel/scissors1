@@ -17,6 +17,10 @@ urlRouter.post("/autogenerate", scissorsController.autogenerate)
 urlRouter.post("/custom", scissorsController.custom)
 
 
+
+urlRouter.get('/:shortid', scissorsController.redirectToFullUrl )
+
+
 urlRouter.get("/history", scissorsController.getHistory )
 
 urlRouter.get("/history/analytics/:shortid", scissorsController.getAnalytics)

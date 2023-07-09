@@ -1,9 +1,7 @@
-const randomize = require("../random")
+const randomize = require("../utilis/random")
 const qrcode = require("qrcode")
 const urlModel = require("../model/urlModel")
 const userModel = require("../model/userModel")
-const cacheExpress = require("express-api-cache")
-const cache = cacheExpress.cache;
 const urlChecker = require("is-url")
 
 /**
@@ -263,9 +261,32 @@ exports.custom = async(req, res)=> {
  *        description: A failed response
  */
 
+
+/**
+ * @swagger
+ * /:
+ *   get:
+ *    summary: Loads the page from the shortened URL
+ *   responses:
+ *      '200':
+ *          description: Redirect page from the shortened URL to the original URL
+ *     '404':
+ *          description: Page not found
+ */
+exports.redirectToFullUrl = async (req, res) => {
+    const short = req.params.shortid.split(':');
+    shortid = short[1]
+    urlDetails = await urlModel.findOne({newLink: shortid})   
+    if (!urlDetails) return res.status(404);
+
+    urlDetails.clicks++ 
+    urlDetails.save()
+    res.redirect(urlDetails.fullurl)
+}
+
 exports.getHistory = async (req, res) => {
     const user = req.user
-    let allLinks= await userModel.findOne({email: user.email}).populate('links')
+    const allLinks= await userModel.findOne({email: user.email}).populate('links')
 
     res.render("history", {
         allLinks: allLinks.links,   
@@ -278,6 +299,7 @@ exports.getHistory = async (req, res) => {
 exports.getAnalytics = async (req, res) => {
     const user = req.user
     let allLinks= await userModel.findOne({email: user.email}).populate('links')
+    
 
     const short = req.params.shortid.split(':');
     shortid = short[1]

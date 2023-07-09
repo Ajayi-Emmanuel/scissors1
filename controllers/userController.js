@@ -1,7 +1,7 @@
 
 const bycrypt = require("bcrypt")
 const userModel = require("../model/userModel")
-const {createToken} = require("../middleware")
+const {createToken} = require("../utilis/middleware")
 
 
 /**
